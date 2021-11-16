@@ -74,13 +74,13 @@ public class Dao {
 				if(rs!=null){ //jos kysely onnistui
 					//con.close();					
 					while(rs.next()){
-						Asiakas asiakas = new Asiakas();
-						asiakas.setAsiakas_id(rs.getInt(1));
+						Asiakas asiakas = new Asiakas();//tehd‰‰n uusi asiakas
+						asiakas.setAsiakas_id(rs.getInt(1));//vied‰‰n tiedot 
 						asiakas.setEtunimi(rs.getString(2));
 						asiakas.setSukunimi(rs.getString(3));
 						asiakas.setPuhelin(rs.getString(4));
 						asiakas.setSposti(rs.getString(5));
-						asiakkaat.add(asiakas);
+						asiakkaat.add(asiakas);//tyˆnnet‰‰n asiakas arraylistiin
 					}					
 				}				
 			}	
@@ -90,5 +90,39 @@ public class Dao {
 		}		
 		return asiakkaat;
 	}
+	public boolean lisaaAsiakas(Asiakas asiakas){
+		boolean paluuArvo=true;
+		sql="INSERT INTO asiakkaat (etunimi,sukunimi,puhelin,sposti) VALUES(?,?,?,?)";						  
+		try {
+			con = yhdista();
+			stmtPrep=con.prepareStatement(sql); 
+			stmtPrep.setString(1, asiakas.getEtunimi());
+			stmtPrep.setString(2, asiakas.getSukunimi());
+			stmtPrep.setString(3, asiakas.getPuhelin());
+			stmtPrep.setString(4, asiakas.getSposti());
+			stmtPrep.executeUpdate();
+	        con.close();
+		} catch (Exception e) {				
+			e.printStackTrace();
+			paluuArvo=false;
+		}				
+		return paluuArvo;
+	}
+	public boolean poistaAsiakas(int id){ //Oikeassa el‰m‰ss‰ tiedot ensisijaisesti merkit‰‰n poistetuksi.
+		boolean paluuArvo=true;
+		
+		sql="DELETE FROM asiakkaat WHERE asiakas_id=?";						  
+		try {
+			con = yhdista();
+			stmtPrep=con.prepareStatement(sql); 
+			stmtPrep.setInt(1, id);			
+			stmtPrep.executeUpdate();
+	        con.close();
+		} catch (Exception e) {				
+			e.printStackTrace();
+			paluuArvo=false;
+		}				
+		return paluuArvo;
+	}	
 }
 
