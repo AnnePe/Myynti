@@ -39,8 +39,8 @@
 <span id="ilmo"></span>
 </body>
 <script>
-$(document).ready(function(){
-	$("#takaisin").click(function(){
+$(document).ready(function(){      //jqueryn aloitustagi
+	$("#takaisin").click(function(){  //kun takaisin teksti‰ painetaan siirryt‰‰n takaisin listaaasiakkaat.jsp funktioon
 		document.location="listaaasiakkaat.jsp";
 	});
 	$("#tiedot").validate({						
@@ -85,16 +85,18 @@ $(document).ready(function(){
 		},			
 		submitHandler: function(form) {	
 			
-			lisaaTiedot();
+			lisaaTiedot();//validointi onnistuneet l‰pi, niin kutsu lis‰‰ tieedot
 		}		
-	}); 	
+	}); 
+	$("#etunimi").focus(); //vied‰‰n kursori etunimi-kentt‰‰n kun sivu ladataan
 });
 //funktio tietojen lis‰‰mist‰ varten. Kutsutaan backin POST-metodia ja v‰litet‰‰n kutsun mukana uudet tiedot json-stringin‰.
 //POST /asiakkaat/
 function lisaaTiedot(){	
-	var formJsonStr = formDataJsonStr($("#tiedot").serializeArray()); //muutetaan lomakkeen tiedot json-stringiksi
-	$.ajax({url:"asiakkaat", data:formJsonStr, type:"POST", dataType:"json", success:function(result) { //result on joko {"response:1"} tai {"response:0"}       
-		if(result.response==0){
+	var formJsonStr = formDataJsonStr($("#tiedot").serializeArray()); //otetaan tiedot taulukon tiedo, muutetaan lomakkeen tiedot json-stringiksi(scripts/main.js) ja vied‰‰n servletille Restiin
+	//console.log(formJsonStr);//tulostaa f12 seliamen consoliin
+	$.ajax({url:"asiakkaat", data:formJsonStr, type:"POST", dataType:"json", success:function(result) {  //Restiss‰ POST tarkoittaa lis‰‰    
+		if(result.response==0){//result on joko {"response:1"} tai {"response:0"}  
     	$("#ilmo").html("Asiakkaan lis‰‰minen ep‰onnistui.");
     }else if(result.response==1){			
     	$("#ilmo").html("Asiakkaan lis‰‰minen onnistui.");

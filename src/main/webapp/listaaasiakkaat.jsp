@@ -38,7 +38,7 @@
 <script>
 $(document).ready(function(){                         //kaikki jquery hommat t‰n alle
 	
-	$("#uusiAsiakas").click(function(){
+	$("#uusiAsiakas").click(function(){ //ohjataan lisaaasiakas.jsp sivulle
 		document.location="lisaaasiakas.jsp";
 	});
 	haeAsiakkaat();
@@ -51,7 +51,7 @@ $(document).ready(function(){                         //kaikki jquery hommat t‰n
 	    		haeAsiakkaat();
 	    	}
 	    });
-	    $("#hakusana").focus();//vied‰‰n kursori haksuana kentt‰‰n
+	    $("#hakusana").focus();//vied‰‰n kursori hakusana kentt‰‰n, ajetaan kun sivu ladataan
 });
 function haeAsiakkaat(){
 	$("#listaus tbody").empty();
@@ -64,7 +64,9 @@ function haeAsiakkaat(){
         	htmlStr+="<td>"+field.sukunimi+"</td>";
         	htmlStr+="<td>"+field.puhelin+"</td>";
         	htmlStr+="<td>"+field.sposti+"</td>";
-        	htmlStr+="<td><span class='poista' onclick=poista("+field.asiakas_id+")>Poista</span></td>";//
+        	htmlStr+="<td><a href='muutaasiakas.jsp?asiakas_id="+field.asiakas_id+"'>Muuta</a>&nbsp;";  
+        	htmlStr+="<span class='poista' onclick=poista("+field.asiakas_id+",'"+field.etunimi+"','"+field.sukunimi+"')>Poista</span></td>"; 
+        	
         	htmlStr+="</tr>";
         	$("#listaus tbody").append(htmlStr);//elementin id=listaus lis‰t‰‰n tbody
         });	
@@ -72,8 +74,8 @@ function haeAsiakkaat(){
 		//console.log(result); //jos haluat n‰ytt‰‰ consolissa toimiiko ajax kutsu
 	}});
 }
-function poista(asiakas_id){
-		if(confirm("Poistetaanko asiakas id:ll‰ " + asiakas_id +"?")){
+function poista(asiakas_id,etunimi,sukunimi){
+		if(confirm("Poista asiakas " + asiakas_id +" "+ etunimi +" "+ sukunimi +"?")){
 		$.ajax({url:"asiakkaat/"+asiakas_id, type:"DELETE", dataType:"json", success:function(result) { //result on joko {"response:1"} tai {"response:0"}
 	        if(result.response==0){
 	        	$("#ilmo").html("Asiakkaan poisto ep‰onnistui.");
@@ -84,6 +86,8 @@ function poista(asiakas_id){
 			}
 	    }});
 	};
+	
+	
 }
 
 
